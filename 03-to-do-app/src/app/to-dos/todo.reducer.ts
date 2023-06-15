@@ -3,9 +3,6 @@ import { create, edit, remove, removeCompleted, toggle, toggleAll } from './todo
 import { Todo } from './models/todo.models';
 
 export const initialState: Todo[] = [
-  new Todo('Salvar al mundo'),
-  new Todo('Preparar el regalo para Cristy'),
-  new Todo('Comprar Traje de Ironman')
 ];
 
 const _todoReducer = createReducer(
