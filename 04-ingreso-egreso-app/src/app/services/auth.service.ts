@@ -1,20 +1,34 @@
 import { Injectable } from '@angular/core';
-import { Auth, UserCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@angular/fire/auth';
-import { Observable, map } from 'rxjs';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, authState, signOut, Unsubscribe } from '@angular/fire/auth';
+import { map } from 'rxjs';
 import { Usuario } from '../models/usuario.model';
-import { Firestore, addDoc, collection } from '@angular/fire/firestore';
+import { Firestore, addDoc, getDoc, collection, doc, onSnapshot, query, where, getDocs } from '@angular/fire/firestore';
+import { AppState } from '../app.reducer';
+import { Store } from '@ngrx/store';
+import * as authActions from '../auth/auth.actions';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private auth: Auth, private firestore: Firestore) { }
+  userUnsubscribe!: Unsubscribe;
+
+  constructor(private auth: Auth, private firestore: Firestore, private store: Store<AppState>) { }
 
   initAuthListener() {
-    return this.auth.beforeAuthStateChanged(fuser => {
-      if(fuser) {
-
+    authState(this.auth).subscribe( async fUser => {
+      if(fUser) {
+        const userRef = collection(this.firestore, 'user')
+        const q = query(userRef, where("uid", "==", fUser.uid));
+        const querySnapshot = (await getDocs(q))
+        querySnapshot.forEach((doc: any) => {
+          this.store.dispatch(authActions.setUser({user: doc.data()}))
+        });
+      }
+      else {
+        this.userUnsubscribe ? this.userUnsubscribe() : null;
+        this.store.dispatch(authActions.unSetUser());
       }
     });
   }
@@ -35,14 +49,12 @@ export class AuthService {
   }
 
   logout() {
-    return this.auth.signOut();
+    return signOut(this.auth);
   }
 
   isAuth() {
-    return new Observable( subscriber => {
-      const unsubscribe = this.auth.onAuthStateChanged(subscriber);
-
-      return { unsubscribe }
-    }).pipe( map( fbUser => fbUser != null) );
+    return authState(this.auth).pipe(
+      map(fUser => fUser !== null)
+    );
   }
 }

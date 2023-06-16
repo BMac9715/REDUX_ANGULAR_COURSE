@@ -1,4 +1,5 @@
 export const environment = {
+  production: false,
   firebase: {
     projectId: 'ingreso-egreso-app-d7da7',
     appId: '1:800624098922:web:19b446229a41bae7a71413',
