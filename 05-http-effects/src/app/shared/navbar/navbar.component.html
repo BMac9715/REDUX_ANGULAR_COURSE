@@ -10,10 +10,10 @@
           <a class="nav-link" routerLink="usuario/1" href="/usuario/1">Usuario</a>
         </li>
       </ul>
-      <form class="d-flex" role="search">
-        <input #txtInput class="form-control me-2" type="search" placeholder="ID Usuario" (keyup.enter)="irUsuario(txtInput.value)">
+      <div class="d-flex">
+        <input #txtInput class="form-control me-2" type="number" placeholder="ID Usuario" (keyup.enter)="irUsuario(txtInput.value)">
         <button class="btn btn-outline-success" type="button" (click)="irUsuario(txtInput.value)">Buscar</button>
-      </form>
+      </div>
     </div>
   </div>
 </nav>
