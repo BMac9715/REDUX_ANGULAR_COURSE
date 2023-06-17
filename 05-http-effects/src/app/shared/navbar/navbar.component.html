@@ -1,0 +1,19 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="home" routerLinkActive="router-link-active" href="/">Effects</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="home" href="/home">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="usuario/1" href="/usuario/1">Usuario</a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search">
+        <input #txtInput class="form-control me-2" type="search" placeholder="ID Usuario" (keyup.enter)="irUsuario(txtInput.value)">
+        <button class="btn btn-outline-success" type="button" (click)="irUsuario(txtInput.value)">Buscar</button>
+      </form>
+    </div>
+  </div>
+</nav>
